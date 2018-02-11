@@ -1,6 +1,9 @@
 # opensolid/geometry [![Travis build Status](https://travis-ci.org/opensolid/geometry.svg?branch=master)](https://travis-ci.org/opensolid/geometry)
 
-_Note: Release notes for version 2.1 are [here](https://github.com/opensolid/geometry/releases/tag/2.1.0).
+_Note: Future versions of this package will be published as
+[`ianmackenzie/elm-geometry`](https://github.com/ianmackenzie/elm-geometry)._
+
+_Release notes for version 2.1 are [here](https://github.com/opensolid/geometry/releases/tag/2.1.0).
 If you're upgrading from 1.x, make sure to also check out the [release notes for 2.0](https://github.com/opensolid/geometry/releases/tag/2.0.0)._
 
 `opensolid/geometry` is an [Elm](http://elm-lang.org) package for working with

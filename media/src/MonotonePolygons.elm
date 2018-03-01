@@ -20,6 +20,8 @@ import Svg.Attributes
 type alias Model =
     { polygon : Polygon2d
     , angleInDegrees : Float
+    , showTriangulation : Bool
+    , showMonotonePolygons : Bool
     }
 
 
@@ -27,6 +29,8 @@ type Msg
     = Click
     | NewPolygon Polygon2d
     | SetAngleInDegrees Float
+    | SetShowTriangulation Bool
+    | SetShowMonotonePolygons Bool
 
 
 renderBounds : BoundingBox2d
@@ -118,7 +122,11 @@ generateNewPolygon =
 
 init : ( Model, Cmd Msg )
 init =
-    ( { polygon = Polygon2d.singleLoop [], angleInDegrees = 0 }
+    ( { polygon = Polygon2d.singleLoop []
+      , angleInDegrees = 0
+      , showTriangulation = False
+      , showMonotonePolygons = False
+      }
     , generateNewPolygon
     )
 
@@ -134,6 +142,12 @@ update message model =
 
         SetAngleInDegrees angleInDegrees ->
             ( { model | angleInDegrees = angleInDegrees }, Cmd.none )
+
+        SetShowTriangulation showTriangulation ->
+            ( { model | showTriangulation = showTriangulation }, Cmd.none )
+
+        SetShowMonotonePolygons showMonotonePolygons ->
+            ( { model | showMonotonePolygons = showMonotonePolygons }, Cmd.none )
 
 
 view : Model -> Html Msg
@@ -159,10 +173,16 @@ view model =
                     toString (360 * toFloat loopIndex / toFloat numLoops)
 
                 fillColor =
-                    "hsla(" ++ hueString ++ ",50%, 50%, 0.5)"
+                    if model.showMonotonePolygons then
+                        "hsla(" ++ hueString ++ ",50%, 50%, 0.5)"
+                    else
+                        "rgb(248, 248, 248)"
 
                 strokeColor =
-                    "hsla(" ++ hueString ++ ",50%, 40%, 0.5)"
+                    if model.showMonotonePolygons then
+                        "hsla(" ++ hueString ++ ",50%, 40%, 0.5)"
+                    else
+                        "darkgrey"
 
                 faceIndices =
                     Monotone.faces vertices
@@ -193,7 +213,10 @@ view model =
         [ Html.div [ Html.Events.onClick Click ]
             [ Svg.render2d renderBounds <|
                 Svg.g []
-                    [ Svg.g [] (List.indexedMap drawLoop loops)
+                    [ if model.showTriangulation then
+                        Svg.g [] (List.indexedMap drawLoop loops)
+                      else
+                        Svg.text ""
                     , Svg.polygon2d
                         [ Svg.Attributes.fill "none"
                         , Svg.Attributes.stroke "black"
@@ -206,6 +229,18 @@ view model =
             { min = -180, max = 180, step = 1 }
             model.angleInDegrees
             |> Html.map SetAngleInDegrees
+        , Html.div []
+            [ InputWidget.checkbox [] model.showTriangulation
+                |> Html.map SetShowTriangulation
+            , Html.text "Show triangulation"
+            ]
+        , Html.div []
+            [ InputWidget.checkbox
+                [ Html.Attributes.disabled (not model.showTriangulation) ]
+                model.showMonotonePolygons
+                |> Html.map SetShowMonotonePolygons
+            , Html.text "Show monotone polygons"
+            ]
         ]
 
 

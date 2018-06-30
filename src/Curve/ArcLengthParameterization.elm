@@ -33,8 +33,7 @@ import Curve.ParameterValue as ParameterValue exposing (ParameterValue)
 import Float.Extra as Float
 
 
-{-| Contains a mapping from curve parameter value to arc length, and vice versa.
--}
+{-| -}
 type ArcLengthParameterization
     = ArcLengthParameterization SegmentTree
 
@@ -74,14 +73,7 @@ segmentsPerLeaf =
     8
 
 
-{-| Build an arc length parameterization for some curve. You must supply:
-
-  - A `derivativeMagnitude` function that returns the magnitude of the first
-    derivative of the curve at a given parameter value
-  - The maximum magnitude of the second derivative of the curve
-  - A tolerance specifying the maximum error of the resulting parameterization
-
--}
+{-| -}
 build : { maxError : Float, derivativeMagnitude : ParameterValue -> Float, maxSecondDerivativeMagnitude : Float } -> ArcLengthParameterization
 build { maxError, derivativeMagnitude, maxSecondDerivativeMagnitude } =
     let
@@ -247,10 +239,7 @@ buildTree derivativeMagnitude lengthAtStart_ paramAtStart_ paramAtEnd height =
             }
 
 
-{-| Convert an arc length to the corresponding parameter value. If the given
-arc length is less than zero or greater than the total arc length of the curve
-(as reported by `totalArcLength`), returns `Nothing`.
--}
+{-| -}
 arcLengthToParameterValue : Float -> ArcLengthParameterization -> Maybe ParameterValue
 arcLengthToParameterValue s (ArcLengthParameterization tree) =
     if s == 0 then
@@ -352,28 +341,13 @@ lengthAtEnd tree =
             leaf.length8
 
 
-{-| Find the total arc length of some curve given its arc length
-parameterization;
-
-    ArcLengthParameterization.totalArcLength
-        parameterization
-
-is equivalent to
-
-    ArcLengthParameterization.parameterValueToArcLength
-        ParameterValue.one
-        parameterization
-
-but is more efficient.
-
--}
+{-| -}
 totalArcLength : ArcLengthParameterization -> Float
 totalArcLength (ArcLengthParameterization tree) =
     lengthAtEnd tree
 
 
-{-| Convert a parameter value to the corresponding arc length.
--}
+{-| -}
 parameterValueToArcLength : ParameterValue -> ArcLengthParameterization -> Float
 parameterValueToArcLength parameterValue (ArcLengthParameterization tree) =
     if parameterValue == ParameterValue.zero then

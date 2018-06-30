@@ -95,23 +95,7 @@ type alias BoundingBox3d =
     Types.BoundingBox3d
 
 
-{-| Construct a bounding box from its minimum and maximum X, Y and Z values:
-
-    exampleBox =
-        BoundingBox3d.fromExtrema
-            { minX = -2
-            , maxX = 2
-            , minY = 2
-            , maxY = 5
-            , minZ = 3
-            , maxZ = 4
-            }
-
-If the minimum and maximum values are provided in the wrong order (for example
-if <code>minX&nbsp;>&nbsp;maxX</code>), then they will be swapped so that the
-resulting bounding box is valid.
-
--}
+{-| -}
 fromExtrema : { minX : Float, maxX : Float, minY : Float, maxY : Float, minZ : Float, maxZ : Float } -> BoundingBox3d
 fromExtrema extrema_ =
     if
@@ -131,22 +115,7 @@ fromExtrema extrema_ =
             }
 
 
-{-| Construct a zero-width bounding box containing a single point.
-
-    point =
-        Point3d.fromCoordinates ( 2, 1, 3 )
-
-    BoundingBox3d.singleton point
-    --> BoundingBox3d.fromExtrema
-    -->     { minX = 2
-    -->     , maxX = 2
-    -->     , minY = 1
-    -->     , maxY = 1
-    -->     , minZ = 3
-    -->     , maxZ = 3
-    -->     }
-
--}
+{-| -}
 singleton : Point3d -> BoundingBox3d
 singleton point =
     let
@@ -163,27 +132,7 @@ singleton point =
         }
 
 
-{-| Construct a bounding box with the two given points as two of its corners.
-The points can be given in any order and don't have to represent the 'primary'
-diagonal of the bounding box.
-
-    firstPoint =
-        Point3d.fromCoordinates ( 2, 1, 3 )
-
-    secondPoint =
-        Point3d.fromCoordinates ( -1, 5, -2 )
-
-    BoundingBox3d.from firstPoint secondPoint
-    --> BoundingBox3d.fromExtrema
-    -->     { minX = -1
-    -->     , maxX = 2
-    -->     , minY = 1
-    -->     , maxY = 5
-    -->     , minZ = -2
-    -->     , maxZ = 3
-    -->     }
-
--}
+{-| -}
 from : Point3d -> Point3d -> BoundingBox3d
 from firstPoint secondPoint =
     let
@@ -203,35 +152,7 @@ from firstPoint secondPoint =
         }
 
 
-{-| Construct a bounding box containing all bounding boxes in the given list. If
-the list is empty, returns `Nothing`.
-
-    singletonBox =
-        BoundingBox3d.singleton
-            (Point3d.fromCoordinates ( 2, 1, 0 ))
-
-    BoundingBox3d.aggregate [ exampleBox, singletonBox ]
-    --> Just
-    -->     (BoundingBox3d.fromExtrema
-    -->         { minX = -2,
-    -->         , maxX = 2
-    -->         , minY = 1
-    -->         , maxY = 5
-    -->         , minZ = 0
-    -->         , maxZ = 4
-    -->         }
-    -->     )
-
-    BoundingBox3d.aggregate [ exampleBox ]
-    --> Just exampleBox
-
-    BoundingBox3d.aggregate []
-    --> Nothing
-
-If you have exactly two bounding boxes, you can use [`BoundingBox3d.hull`](#hull)
-instead (which returns a `BoundingBox3d` instead of a `Maybe BoundingBox3d`).
-
--}
+{-| -}
 aggregate : List BoundingBox3d -> Maybe BoundingBox3d
 aggregate boundingBoxes =
     case boundingBoxes of
@@ -242,136 +163,55 @@ aggregate boundingBoxes =
             Nothing
 
 
-{-| Construct a bounding box containing all points in the given list. If the
-list is empty, returns `Nothing`.
-
-    BoundingBox3d.containingPoints
-        [ Point3d.fromCoordinates ( 2, 1, 3 )
-        , Point3d.fromCoordinates ( -1, 5, -2 )
-        , Point3d.fromCoordinates ( 6, 4, 2 )
-        ]
-    --> Just <|
-    -->     BoundingBox3d.fromExtrema
-    -->         { minX = -1
-    -->         , maxX = 6
-    -->         , minY = 1
-    -->         , maxY = 5
-    -->         , minZ = -2
-    -->         , maxZ = 3
-    -->         }
-
-    BoundingBox3d.containingPoints []
-    --> Nothing
-
--}
+{-| -}
 containingPoints : List Point3d -> Maybe BoundingBox3d
 containingPoints points =
     aggregate (List.map singleton points)
 
 
-{-| Get the minimum and maximum X, Y and Z values of a bounding box in a single
-record.
-
-    BoundingBox3d.extrema exampleBox
-    --> { minX = -2
-    --> , maxX = 2
-    --> , minY = 2
-    --> , maxY = 5
-    --> , minZ = 3
-    --> , maxZ = 4
-    --> }
-
-Can be useful when combined with record destructuring, for example
-
-    { minX, maxX, minY, maxY, minZ, maxZ } =
-        BoundingBox3d.extrema exampleBox
-
-
-    --> minX = -2
-    --> maxX = 2
-    --> minY = 2
-    --> maxY = 5
-    --> minZ = 3
-    --> maxZ = 4
-
--}
+{-| -}
 extrema : BoundingBox3d -> { minX : Float, maxX : Float, minY : Float, maxY : Float, minZ : Float, maxZ : Float }
 extrema (Types.BoundingBox3d extrema_) =
     extrema_
 
 
-{-| Get the minimum X value of a bounding box.
-
-    BoundingBox3d.minX exampleBox
-    --> -2
-
--}
+{-| -}
 minX : BoundingBox3d -> Float
 minX (Types.BoundingBox3d boundingBox) =
     boundingBox.minX
 
 
-{-| Get the maximum X value of a bounding box.
-
-    BoundingBox3d.maxX exampleBox
-    --> 2
-
--}
+{-| -}
 maxX : BoundingBox3d -> Float
 maxX (Types.BoundingBox3d boundingBox) =
     boundingBox.maxX
 
 
-{-| Get the minimum Y value of a bounding box.
-
-    BoundingBox3d.minY exampleBox
-    --> 2
-
--}
+{-| -}
 minY : BoundingBox3d -> Float
 minY (Types.BoundingBox3d boundingBox) =
     boundingBox.minY
 
 
-{-| Get the maximum Y value of a bounding box.
-
-    BoundingBox3d.maxY exampleBox
-    --> 5
-
--}
+{-| -}
 maxY : BoundingBox3d -> Float
 maxY (Types.BoundingBox3d boundingBox) =
     boundingBox.maxY
 
 
-{-| Get the minimum Z value of a bounding box.
-
-    BoundingBox3d.minZ exampleBox
-    --> 3
-
--}
+{-| -}
 minZ : BoundingBox3d -> Float
 minZ (Types.BoundingBox3d boundingBox) =
     boundingBox.minZ
 
 
-{-| Get the maximum Z value of a bounding box.
-
-    BoundingBox3d.maxZ exampleBox
-    --> 4
-
--}
+{-| -}
 maxZ : BoundingBox3d -> Float
 maxZ (Types.BoundingBox3d boundingBox) =
     boundingBox.maxZ
 
 
-{-| Get the X, Y and Z dimensions (widths) of a bounding box.
-
-    BoundingBox3d.dimensions exampleBox
-    --> ( 4, 3, 1 )
-
--}
+{-| -}
 dimensions : BoundingBox3d -> ( Float, Float, Float )
 dimensions boundingBox =
     ( maxX boundingBox - minX boundingBox
@@ -380,45 +220,25 @@ dimensions boundingBox =
     )
 
 
-{-| Get the median X value of a bounding box.
-
-    BoundingBox3d.midX exampleBox
-    --> 0
-
--}
+{-| -}
 midX : BoundingBox3d -> Float
 midX (Types.BoundingBox3d boundingBox) =
     boundingBox.minX + 0.5 * (boundingBox.maxX - boundingBox.minX)
 
 
-{-| Get the median Y value of a bounding box.
-
-    BoundingBox3d.midY exampleBox
-    --> 3.5
-
--}
+{-| -}
 midY : BoundingBox3d -> Float
 midY (Types.BoundingBox3d boundingBox) =
     boundingBox.minY + 0.5 * (boundingBox.maxY - boundingBox.minY)
 
 
-{-| Get the median Z value of a bounding box.
-
-    BoundingBox3d.midZ exampleBox
-    --> 3.5
-
--}
+{-| -}
 midZ : BoundingBox3d -> Float
 midZ (Types.BoundingBox3d boundingBox) =
     boundingBox.minZ + 0.5 * (boundingBox.maxZ - boundingBox.minZ)
 
 
-{-| Get the point at the center of a bounding box.
-
-    BoundingBox3d.centroid exampleBox
-    --> Point3d.fromCoordinates ( 0, 3.5, 3.5 )
-
--}
+{-| -}
 centroid : BoundingBox3d -> Point3d
 centroid boundingBox =
     Point3d.fromCoordinates
@@ -428,21 +248,7 @@ centroid boundingBox =
         )
 
 
-{-| Check if a bounding box contains a particular point.
-
-    firstPoint =
-        Point3d.fromCoordinates ( 1, 4, 3 )
-
-    secondPoint =
-        Point3d.fromCoordinates ( 3, 4, 5 )
-
-    BoundingBox3d.contains firstPoint exampleBox
-    --> True
-
-    BoundingBox3d.contains secondPoint exampleBox
-    --> False
-
--}
+{-| -}
 contains : Point3d -> BoundingBox3d -> Bool
 contains point boundingBox =
     let
@@ -454,54 +260,7 @@ contains point boundingBox =
         && (minZ boundingBox <= z && z <= maxZ boundingBox)
 
 
-{-| Test if two boxes touch or overlap at all (have any points in common);
-
-    BoundingBox3d.intersects firstBox secondBox
-
-is equivalent to
-
-    BoundingBox3d.intersection firstBox secondBox
-        /= Nothing
-
-but is more efficient.
-
-    firstBox =
-        BoundingBox3d.fromExtrema
-            { minX = 0
-            , maxX = 3
-            , minY = 0
-            , maxY = 2
-            , minZ = 0
-            , maxZ = 1
-            }
-
-    secondBox =
-        BoundingBox3d.fromExtrema
-            { minX = 0
-            , maxX = 3
-            , minY = 1
-            , maxY = 4
-            , minZ = -1
-            , maxZ = 2
-            }
-
-    thirdBox =
-        BoundingBox3d.fromExtrema
-            { minX = 0
-            , maxX = 3
-            , minY = 4
-            , maxY = 5
-            , minZ = -1
-            , maxZ = 2
-            }
-
-    BoundingBox3d.intersects firstBox secondBox
-    --> True
-
-    BoundingBox3d.intersects firstBox thirdBox
-    --> False
-
--}
+{-| -}
 intersects : BoundingBox3d -> BoundingBox3d -> Bool
 intersects other boundingBox =
     (minX boundingBox <= maxX other)
@@ -569,65 +328,7 @@ alwaysFalse firstBox secondBox =
     False
 
 
-{-| Check if one box overlaps another by less than, greater than or equal to a
-given amount. For example, you could implement a tolerant collision check (one
-that only returns true if the boxes overlap by at least some small finite
-amount, and ignores boxes that just barely touch each other) as
-
-    boxesCollide box1 box2 =
-        BoundingBox3d.overlappingBy GT 0.001 box1 box2
-
-This can be read as "`box1` and `box2` are overlapping by greater than 0.001
-units". (The [`Order`](http://package.elm-lang.org/packages/elm-lang/core/latest/Basics#Order)
-type and its three values `LT`, `GT` and `EQ` are defined in Elm's `Basics`
-module so are available by default in any Elm program.)
-
-Overlap is defined as the _minimum_ distance one box would have to move so that
-it did not touch the other, and is always positive for any two overlapping
-boxes.
-
-Boxes that just touch are considered to have an overlap of zero, which is
-distinct from 'no overlap'. Boxes that do not touch or overlap at all are
-considered to have an overlap which is less than zero but not comparable to any
-negative number.
-
-
-### Less than
-
-  - `overlappingBy LT 1e-3` will return true if the two boxes overlap by less
-    than 0.001 units or if they do not overlap at all (false if they overlap by
-    more than 0.001 units).
-  - `overlappingBy LT 0` will return true only if the two boxes don't touch or
-    overlap at all.
-  - `overlappingBy LT -1e-3` will always return false! If you care about _how
-    much_ two boxes are separated by, use `separatedBy` instead.
-
-
-### Greater than
-
-  - `overlappingBy GT 1e-3` will return true if the two boxes overlap by at
-    least 0.001 units (false if they overlap by less than that or do not overlap
-    at all).
-  - `overlappingBy GT 0` will return true if the two boxes overlap by any
-    non-zero amount (false if they just touch or do not overlap at all).
-  - `overlappingBy GT -1e-3` doesn't make a lot of sense but will return true if
-    the boxes touch or overlap at all (false if they don't overlap, regardless
-    of how close they are to overlapping). In this case, though, it would make
-    more sense to just user `intersects` instead.
-
-
-### Equal to
-
-Checking whether two boxes overlap by exactly a given amount is pretty weird and
-vulnerable to floating-point roundoff, but is defined as follows:
-
-  - `overlappingBy EQ 1e-3` will return true if the two boxes overlap by exactly
-    0.001 units.
-  - `overlappingBy EQ 0` will return true if and only if the boxes just touch
-    each other.
-  - `overlappingBy EQ -1e-3` will always return false.
-
--}
+{-| -}
 overlappingBy : Order -> Float -> BoundingBox3d -> BoundingBox3d -> Bool
 overlappingBy order tolerance =
     case order of
@@ -671,63 +372,7 @@ overlappingBy order tolerance =
                 alwaysFalse
 
 
-{-| Check if one box is separated from another by less than, greater than or
-equal to a given amount. For example, to perform clash detection between some
-objects, you could use `separatedBy` on those objects' bounding boxes as a quick
-check to see if the objects had a gap of at least 1 cm between them:
-
-    safelySeparated box1 box2 =
-        BoundingBox3d.separatedBy GT 0.01 box1 box2
-
-This can be read as "`box1` and `box2` are separated by greater than 0.01
-units". (The [`Order`](http://package.elm-lang.org/packages/elm-lang/core/latest/Basics#Order)
-type and its three values `LT`, `GT` and `EQ` are defined in Elm's `Basics`
-module so are available by default in any Elm program.)
-
-Separation is defined as the _minimum_ distance one box would have to move
-so that it touched the other, and is always positive for any two boxes that do
-not touch.
-
-Boxes that just touch are considered to have a separation of zero, which is
-distinct from 'no separation'. 'No separation' (overlap) is considered to be
-less than zero but not comparable to any negative number.
-
-
-### Less than
-
-  - `separatedBy LT 1e-3` will return true if the two boxes are separated by
-    less than 0.001 units or if they touch or overlap (false if they are
-    separated by at least 0.001 units).
-  - `separatedBy LT 0` will return true only if the boxes overlap by some
-    non-zero amount.
-  - `separatedBy LT -1e-3` will always return false! If you care about _how
-    much_ two boxes overlap by, use `overlappingBy` instead.
-
-
-### Greater than
-
-  - `separatedBy GT 1e-3` will return true if the two boxes are separated by at
-    least 0.001 units (false if they are separated by less than that or if they
-    touch or overlap).
-  - `separatedBy GT 0` will return true if the two boxes are separated by any
-    non-zero amount (false if they touch or overlap).
-  - `separatedBy GT -1e-3` doesn't make a lot of sense but will return true if
-    the boxes just touch or are separated by any amount (false if they overlap
-    by any non-zero amount).
-
-
-### Equal to
-
-Checking whether two boxes are separated by exactly a given amount is pretty
-weird and vulnerable to floating-point roundoff, but is defined as follows:
-
-  - `separatedBy EQ 1e-3` will return true if the two boxes are separated by
-    exactly 0.001 units.
-  - `separatedBy EQ 0` will return true if and only if the boxes just touch each
-    other.
-  - `separatedBy EQ -3` will always return false.
-
--}
+{-| -}
 separatedBy : Order -> Float -> BoundingBox3d -> BoundingBox3d -> Bool
 separatedBy order tolerance =
     case order of
@@ -771,46 +416,7 @@ separatedBy order tolerance =
                 alwaysFalse
 
 
-{-| Test if the second given bounding box is fully contained within the first
-(is a subset of it).
-
-    outerBox =
-        BoundingBox3d.fromExtrema
-            { minX = 0
-            , maxX = 10
-            , minY = 0
-            , maxY = 10
-            , minZ = 0
-            , maxZ = 10
-            }
-
-    innerBox =
-        BoundingBox3d.fromExtrema
-            { minX = 1
-            , maxX = 5
-            , minY = 3
-            , maxY = 9
-            , minZ = 7
-            , maxZ = 8
-            }
-
-    overlappingBox =
-        BoundingBox3d.fromExtrema
-            { minX = 1
-            , maxX = 5
-            , minY = 3
-            , maxY = 12
-            , minZ = 7
-            , maxZ = 8
-            }
-
-    BoundingBox3d.isContainedIn outerBox innerBox
-    --> True
-
-    BoundingBox3d.isContainedIn outerBox overlappingBox
-    --> False
-
--}
+{-| -}
 isContainedIn : BoundingBox3d -> BoundingBox3d -> Bool
 isContainedIn other boundingBox =
     (minX other <= minX boundingBox && maxX boundingBox <= maxX other)
@@ -818,39 +424,7 @@ isContainedIn other boundingBox =
         && (minZ other <= minZ boundingBox && maxZ boundingBox <= maxZ other)
 
 
-{-| Build a bounding box that contains both given bounding boxes.
-
-    firstBox =
-        BoundingBox3d.fromExtrema
-            { minX = 1
-            , maxX = 4
-            , minY = 2
-            , maxY = 3
-            , minZ = 0
-            , maxZ = 5
-            }
-
-    secondBox =
-        BoundingBox3d.fromExtrema
-            { minX = -2
-            , maxX = 2
-            , minY = 4
-            , maxY = 5
-            , minZ = -1
-            , maxZ = 0
-            }
-
-    BoundingBox3d.hull firstBox secondBox
-    --> BoundingBox3d.fromExtrema
-    -->     { minX = -2
-    -->     , maxX = 4
-    -->     , minY = 2
-    -->     , maxY = 5
-    -->     , minZ = -1
-    -->     , maxZ = 5
-    -->     }
-
--}
+{-| -}
 hull : BoundingBox3d -> BoundingBox3d -> BoundingBox3d
 hull firstBox secondBox =
     fromExtrema
@@ -863,91 +437,7 @@ hull firstBox secondBox =
         }
 
 
-{-| Attempt to build a bounding box that contains all points common to both
-given bounding boxes. If the given boxes do not overlap, returns `Nothing`.
-
-    firstBox =
-        BoundingBox3d.fromExtrema
-            { minX = 1
-            , maxX = 4
-            , minY = 2
-            , maxY = 3
-            , minZ = 5
-            , maxZ = 8
-            }
-
-    secondBox =
-        BoundingBox3d.fromExtrema
-            { minX = 2
-            , maxX = 5
-            , minY = 1
-            , maxY = 4
-            , minZ = 6
-            , maxZ = 7
-            }
-
-    thirdBox =
-        BoundingBox3d.fromExtrema
-            { minX = 1
-            , maxX = 4
-            , minY = 4
-            , maxY = 5
-            , minZ = 5
-            , maxZ = 8
-            }
-
-    BoundingBox3d.intersection firstBox secondBox
-    --> Just
-    -->     (BoundingBox3d.fromExtrema
-    -->         { minX = 2
-    -->         , maxX = 4
-    -->         , minY = 2
-    -->         , maxY = 3
-    -->         , minZ = 6
-    -->         , maxZ = 7
-    -->         }
-    -->     )
-
-    BoundingBox3d.intersection firstBox thirdBox
-    --> Nothing
-
-If two boxes just touch along an edge or at a corner, they are still considered
-to have an intersection, even though that intersection will have zero area (at
-least one of its dimensions will be zero):
-
-    firstBox =
-        BoundingBox3d.fromExtrema
-            { minX = 0
-            , maxX = 1
-            , minY = 0
-            , maxY = 2
-            , minZ = 0
-            , maxZ = 3
-            }
-
-    secondBox =
-        BoundingBox3d.fromExtrema
-            { minX = 1
-            , maxX = 2
-            , minY = 1
-            , maxY = 3
-            , minZ = 1
-            , maxZ = 4
-            }
-
-    BoundingBox3d.intersection firstBox secondBox
-    --> Just
-    -->     (BoundingBox3d.fromExtrema
-    -->         { minX = 1
-    -->         , maxX = 1
-    -->         , minY = 1
-    -->         , maxY = 2
-    -->         , minZ = 1
-    -->         , maxZ = 3
-    -->         }
-    -->     )
-
--}
+{-| -}
 intersection : BoundingBox3d -> BoundingBox3d -> Maybe BoundingBox3d
 intersection firstBox secondBox =
     if intersects firstBox secondBox then
@@ -965,22 +455,7 @@ intersection firstBox secondBox =
         Nothing
 
 
-{-| Scale a bounding box about a given point by a given scale.
-
-    point =
-        Point3d.fromCoordinates ( 2, 2, 2 )
-
-    BoundingBox3d.scaleAbout point 2 exampleBox
-    --> BoundingBox3d.fromExtrema
-    -->     { minX = -6
-    -->     , maxX = 2
-    -->     , minY = 2
-    -->     , maxY = 8
-    -->     , minZ = 4
-    -->     , maxZ = 6
-    -->     }
-
--}
+{-| -}
 scaleAbout : Point3d -> Float -> BoundingBox3d -> BoundingBox3d
 scaleAbout point scale boundingBox =
     let
@@ -1007,22 +482,7 @@ scaleAbout point scale boundingBox =
             }
 
 
-{-| Translate a bounding box by a given displacement.
-
-    displacement =
-        Vector3d.fromComponents ( 2, -3, 1 )
-
-    BoundingBox3d.translateBy displacement exampleBox
-    --> BoundingBox3d.fromExtrema
-    -->     { minX = 0
-    -->     , maxX = 4
-    -->     , minY = -1
-    -->     , maxY = 2
-    -->     , minZ = 4
-    -->     , maxZ = 5
-    -->     }
-
--}
+{-| -}
 translateBy : Vector3d -> BoundingBox3d -> BoundingBox3d
 translateBy displacement boundingBox =
     let
@@ -1039,16 +499,7 @@ translateBy displacement boundingBox =
         }
 
 
-{-| Translate a bounding box in a given direction by a given distance;
-
-    BoundingBox3d.translateIn direction distance
-
-is equivalent to
-
-    BoundingBox3d.translateBy
-        (Vector3d.withLength distance direction)
-
--}
+{-| -}
 translateIn : Direction3d -> Float -> BoundingBox3d -> BoundingBox3d
 translateIn direction distance boundingBox =
     translateBy (Vector3d.withLength distance direction) boundingBox

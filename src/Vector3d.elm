@@ -113,17 +113,8 @@ its tip.
 
 # Coordinate conversions
 
-Functions for transforming vectors between local and global coordinates in
-different coordinate frames. Like other transformations, coordinate
-transformations of vectors depend only on the orientations of the relevant
-frames/sketch planes, not their positions.
-
-For the examples, assume the following definition of a local coordinate frame,
-one that is rotated 30 degrees counterclockwise around the Z axis from the
-global XYZ frame:
-
-    rotatedFrame =
-        Frame3d.rotateAround Axis3d.z (degrees 30) Frame3d.xyz
+Like other transformations, coordinate transformations of vectors depend only on
+the orientations of the relevant frames/sketch planes, not their positions.
 
 @docs relativeTo, placeIn, projectInto
 
@@ -144,40 +135,19 @@ type alias Vector3d =
     Types.Vector3d
 
 
-{-| The zero vector.
-
-    Vector3d.zero
-    --> Vector3d.fromComponents ( 0, 0, 0 )
-
--}
+{-| -}
 zero : Vector3d
 zero =
     fromComponents ( 0, 0, 0 )
 
 
-{-| Construct a vector from its X, Y and Z components.
-
-    vector =
-        Vector3d.fromComponents ( 2, 1, 3 )
-
--}
+{-| -}
 fromComponents : ( Float, Float, Float ) -> Vector3d
 fromComponents =
     Types.Vector3d
 
 
-{-| Construct a vector from the first given point to the second.
-
-    startPoint =
-        Point3d.fromCoordinates ( 1, 1, 1 )
-
-    endPoint =
-        Point3d.fromCoordinates ( 4, 5, 6 )
-
-    Vector3d.from startPoint endPoint
-    --> Vector3d.fromComponents ( 3, 4, 5 )
-
--}
+{-| -}
 from : Point3d -> Point3d -> Vector3d
 from firstPoint secondPoint =
     let
@@ -190,12 +160,7 @@ from firstPoint secondPoint =
     fromComponents ( x2 - x1, y2 - y1, z2 - z1 )
 
 
-{-| Construct a vector with the given length in the given direction.
-
-    Vector3d.withLength 5 Direction3d.y
-    --> Vector3d.fromComponents ( 0, 5, 0 )
-
--}
+{-| -}
 withLength : Float -> Direction3d -> Vector3d
 withLength length_ direction_ =
     let
@@ -205,33 +170,7 @@ withLength length_ direction_ =
     fromComponents ( length_ * dx, length_ * dy, length_ * dz )
 
 
-{-| Construct a 3D vector lying _on_ a sketch plane by providing a 2D vector
-specified in XY coordinates _within_ the sketch plane.
-
-    vector2d =
-        Vector2d.fromComponents ( 2, 3 )
-
-    Vector3d.on SketchPlane3d.xy vector2d
-    --> Vector3d.fromComponents ( 2, 3, 0 )
-
-    Vector3d.on SketchPlane3d.yz vector2d
-    --> Vector3d.fromComponents ( 0, 2, 3 )
-
-    Vector3d.on SketchPlane3d.zx vector2d
-    --> Vector3d.fromComponents ( 3, 0, 2 )
-
-A slightly more complex example:
-
-    tiltedSketchPlane =
-        SketchPlane3d.xy
-            |> SketchPlane3d.rotateAround Axis3d.x
-                (degrees 45)
-
-    Vector3d.on tiltedSketchPlane <|
-        Vector2d.fromComponents ( 1, 1 )
-    --> Vector3d.fromComponents ( 1, 0.7071, 0.7071 )
-
--}
+{-| -}
 on : SketchPlane3d -> Vector2d -> Vector3d
 on sketchPlane vector2d =
     let
@@ -251,23 +190,7 @@ on sketchPlane vector2d =
         )
 
 
-{-| Construct an arbitrary vector perpendicular to the given vector. The exact
-length and direction of the resulting vector are not specified, but it is
-guaranteed to be perpendicular to the given vector and non-zero (unless the
-given vector is itself zero).
-
-    Vector3d.perpendicularTo
-        (Vector3d.fromComponents ( 3, 0, 0 ))
-    --> Vector3d.fromComponents ( 0, 0, -3 )
-
-    Vector3d.perpendicularTo
-        (Vector3d.fromComponents ( 1, 2, 3 ))
-    --> Vector3d.fromComponents ( 0, -3, 2 )
-
-    Vector3d.perpendicularTo Vector3d.zero
-    --> Vector3d.zero
-
--}
+{-| -}
 perpendicularTo : Vector3d -> Vector3d
 perpendicularTo vector =
     let
@@ -294,39 +217,7 @@ perpendicularTo vector =
         fromComponents ( -y, x, 0 )
 
 
-{-| Construct a vector by interpolating from the first given vector to the
-second, based on a parameter that ranges from zero to one.
-
-    startVector =
-        Vector3d.fromComponents ( 1, 2, 4 )
-
-    endVector =
-        Vector3d.fromComponents ( 1, 3, 8 )
-
-    Vector3d.interpolateFrom startVector endVector 0.25
-    --> Vector3d.fromComponents ( 1, 2.25, 5 )
-
-Partial application may be useful:
-
-    interpolatedVector : Float -> Vector3d
-    interpolatedVector =
-        Vector3d.interpolateFrom startVector endVector
-
-    List.map interpolatedVector [ 0, 0.5, 1 ]
-    --> [ Vector3d.fromComponents ( 1, 2, 4 )
-    --> , Vector3d.fromComponents ( 1, 2, 6 )
-    --> , Vector3d.fromComponents ( 1, 2, 8 )
-    --> ]
-
-You can pass values less than zero or greater than one to extrapolate:
-
-    interpolatedVector -0.5
-    --> Vector3d.fromComponents ( 1, 2, 2 )
-
-    interpolatedVector 1.25
-    --> Vector3d.fromComponents ( 1, 2, 9 )
-
--}
+{-| -}
 interpolateFrom : Vector3d -> Vector3d -> Float -> Vector3d
 interpolateFrom v1 v2 t =
     let
@@ -343,76 +234,31 @@ interpolateFrom v1 v2 t =
         )
 
 
-{-| Extract the components of a vector.
-
-    Vector3d.fromComponents ( 2, 3, 4 )
-        |> Vector3d.components
-    --> ( 2, 3, 4 )
-
-This combined with Elm's built-in tuple destructuring provides a convenient way
-to extract the X, Y and Z components of a vector in one line of code:
-
-    ( x, y, z ) =
-        Vector3d.components vector
-
--}
+{-| -}
 components : Vector3d -> ( Float, Float, Float )
 components (Types.Vector3d components_) =
     components_
 
 
-{-| Get the X component of a vector.
-
-    Vector3d.fromComponents ( 1, 2, 3 )
-        |> Vector3d.xComponent
-    --> 1
-
--}
+{-| -}
 xComponent : Vector3d -> Float
 xComponent (Types.Vector3d ( x, _, _ )) =
     x
 
 
-{-| Get the Y component of a vector.
-
-    Vector3d.fromComponents ( 1, 2, 3 )
-        |> Vector3d.yComponent
-    --> 2
-
--}
+{-| -}
 yComponent : Vector3d -> Float
 yComponent (Types.Vector3d ( _, y, _ )) =
     y
 
 
-{-| Get the Z component of a vector.
-
-    Vector3d.fromComponents ( 1, 2, 3 )
-        |> Vector3d.zComponent
-    --> 3
-
--}
+{-| -}
 zComponent : Vector3d -> Float
 zComponent (Types.Vector3d ( _, _, z )) =
     z
 
 
-{-| Find the component of a vector in an arbitrary direction, for example
-
-    verticalSpeed =
-        Vector3d.componentIn upDirection velocity
-
-This is more general and flexible than using `xComponent`, `yComponent` or
-`zComponent`, all of which can be expressed in terms of `componentIn`; for
-example,
-
-    Vector3d.zComponent vector
-
-is equivalent to
-
-    Vector3d.componentIn Direction3d.z vector
-
--}
+{-| -}
 componentIn : Direction3d -> Vector3d -> Float
 componentIn direction_ vector =
     let
@@ -425,52 +271,19 @@ componentIn direction_ vector =
     vx * dx + vy * dy + vz * dz
 
 
-{-| Compare two vectors within a tolerance. Returns true if the difference
-between the two given vectors has magnitude less than the given tolerance.
-
-    firstVector =
-        Vector3d.fromComponents ( 2, 1, 3 )
-
-    secondVector =
-        Vector3d.fromComponents ( 2.0002, 0.9999, 3.0001 )
-
-    Vector3d.equalWithin 1e-3 firstVector secondVector
-    --> True
-
-    Vector3d.equalWithin 1e-6 firstVector secondVector
-    --> False
-
--}
+{-| -}
 equalWithin : Float -> Vector3d -> Vector3d -> Bool
 equalWithin tolerance firstVector secondVector =
     squaredLength (difference firstVector secondVector) <= tolerance * tolerance
 
 
-{-| Get the length (magnitude) of a vector.
-
-    Vector3d.length (Vector3d.fromComponents ( 2, 1, 2 ))
-    --> 3
-
--}
+{-| -}
 length : Vector3d -> Float
 length vector =
     sqrt (squaredLength vector)
 
 
-{-| Get the squared length of a vector. `squaredLength` is slightly faster than
-`length`, so for example
-
-    Vector3d.squaredLength vector > tolerance * tolerance
-
-is equivalent to but slightly more efficient than
-
-    Vector3d.length vector > tolerance
-
-since the latter requires a square root under the hood. In many cases, however,
-the speed difference will be negligible and using `length` is much more
-readable!
-
--}
+{-| -}
 squaredLength : Vector3d -> Float
 squaredLength vector =
     let
@@ -480,21 +293,7 @@ squaredLength vector =
     x * x + y * y + z * z
 
 
-{-| Attempt to find the direction of a vector. In the case of a zero vector,
-returns `Nothing`.
-
-    Vector3d.fromComponents ( 3, 0, 3 )
-        |> Vector3d.direction
-    --> Just
-    -->     (Direction3d.fromAzimuthAndElevation
-    -->         (degrees 0)
-    -->         (degrees 45)
-    -->     )
-
-    Vector3d.direction Vector3d.zero
-    --> Nothing
-
--}
+{-| -}
 direction : Vector3d -> Maybe Direction3d
 direction vector =
     if vector == zero then
@@ -507,24 +306,7 @@ direction vector =
         Just (Direction3d.unsafe (components normalizedVector))
 
 
-{-| Attempt to find the length and direction of a vector. In the case of a zero
-vector, returns `Nothing`.
-
-    vector =
-        Vector3d.fromComponents ( 3, 0, 3 )
-
-    Vector3d.lengthAndDirection vector
-    --> Just
-    -->     ( 4.2426
-    -->     , Direction3d.fromAzimuthAndElevation
-    -->         (degrees 0)
-    -->         (degrees 45)
-    -->     )
-
-    Vector3d.lengthAndDirection Vector3d.zero
-    --> Nothing
-
--}
+{-| -}
 lengthAndDirection : Vector3d -> Maybe ( Float, Direction3d )
 lengthAndDirection vector =
     let
@@ -544,30 +326,7 @@ lengthAndDirection vector =
         Just ( vectorLength, vectorDirection )
 
 
-{-| Normalize a vector to have a length of one. Zero vectors are left as-is.
-
-    vector =
-        Vector3d.fromComponents ( 3, 0, 4 )
-
-    Vector3d.normalize vector
-    --> Vector3d.fromComponents ( 0.6, 0, 0.8 )
-
-    Vector3d.normalize Vector3d.zero
-    --> Vector3d.zero
-
-**Warning**: `Vector3d.direction` is safer since it forces you to explicitly
-consider the case where the given vector is zero. `Vector3d.normalize` is
-primarily useful for cases like generating WebGL meshes, where defaulting to a
-zero vector for degenerate cases is acceptable, and the overhead of something
-like
-
-    Vector3d.direction vector
-        |> Maybe.map Direction3d.toVector
-        |> Maybe.withDefault Vector3d.zero
-
-(which is functionally equivalent to `Vector3d.normalize vector`) is too high.
-
--}
+{-| -}
 normalize : Vector3d -> Vector3d
 normalize vector =
     if vector == zero then
@@ -576,18 +335,7 @@ normalize vector =
         scaleBy (1 / length vector) vector
 
 
-{-| Find the sum of two vectors.
-
-    firstVector =
-        Vector3d.fromComponents ( 1, 2, 3 )
-
-    secondVector =
-        Vector3d.fromComponents ( 4, 5, 6 )
-
-    Vector3d.sum firstVector secondVector
-    --> Vector3d.fromComponents ( 5, 7, 9 )
-
--}
+{-| -}
 sum : Vector3d -> Vector3d -> Vector3d
 sum firstVector secondVector =
     let
@@ -600,18 +348,7 @@ sum firstVector secondVector =
     fromComponents ( x1 + x2, y1 + y2, z1 + z2 )
 
 
-{-| Find the difference between two vectors (the first vector minus the second).
-
-    firstVector =
-        Vector3d.fromComponents ( 5, 6, 7 )
-
-    secondVector =
-        Vector3d.fromComponents ( 1, 1, 1 )
-
-    Vector3d.difference firstVector secondVector
-    --> Vector3d.fromComponents ( 4, 5, 6 )
-
--}
+{-| -}
 difference : Vector3d -> Vector3d -> Vector3d
 difference firstVector secondVector =
     let
@@ -624,18 +361,7 @@ difference firstVector secondVector =
     fromComponents ( x1 - x2, y1 - y2, z1 - z2 )
 
 
-{-| Find the dot product of two vectors.
-
-    firstVector =
-        Vector3d.fromComponents ( 1, 0, 2 )
-
-    secondVector =
-        Vector3d.fromComponents ( 3, 4, 5 )
-
-    Vector3d.dotProduct firstVector secondVector
-    --> 13
-
--}
+{-| -}
 dotProduct : Vector3d -> Vector3d -> Float
 dotProduct firstVector secondVector =
     let
@@ -648,18 +374,7 @@ dotProduct firstVector secondVector =
     x1 * x2 + y1 * y2 + z1 * z2
 
 
-{-| Find the cross product of two vectors.
-
-    firstVector =
-        Vector3d.fromComponents ( 2, 0, 0 )
-
-    secondVector =
-        Vector3d.fromComponents ( 0, 3, 0 )
-
-    Vector3d.crossProduct firstVector secondVector
-    --> Vector3d.fromComponents ( 0, 0, 6 )
-
--}
+{-| -}
 crossProduct : Vector3d -> Vector3d -> Vector3d
 crossProduct firstVector secondVector =
     let
@@ -676,12 +391,7 @@ crossProduct firstVector secondVector =
         )
 
 
-{-| Reverse the direction of a vector, negating its components.
-
-    Vector3d.reverse (Vector3d.fromComponents ( 1, -3, 2 ))
-    --> Vector3d.fromComponents ( -1, 3, -2 )
-
--}
+{-| -}
 reverse : Vector3d -> Vector3d
 reverse vector =
     let
@@ -691,13 +401,7 @@ reverse vector =
     fromComponents ( -x, -y, -z )
 
 
-{-| Scale the length of a vector by a given scale.
-
-    Vector3d.fromComponents ( 1, 2, 3 )
-        |> Vector3d.scaleBy 3
-    --> Vector3d.fromComponents ( 3, 6, 9 )
-
--}
+{-| -}
 scaleBy : Float -> Vector3d -> Vector3d
 scaleBy scale vector =
     let
@@ -707,18 +411,7 @@ scaleBy scale vector =
     fromComponents ( x * scale, y * scale, z * scale )
 
 
-{-| Rotate a vector around a given axis by a given angle (in radians).
-
-    vector =
-        Vector3d.fromComponents ( 2, 0, 1 )
-
-    Vector3d.rotateAround Axis3d.x (degrees 90) vector
-    --> Vector3d.fromComponents ( 2, -1, 0 )
-
-    Vector3d.rotateAround Axis3d.z (degrees 45) vector
-    --> Vector3d.fromComponents ( 1.4142, 1.4142, 1 )
-
--}
+{-| -}
 rotateAround : Axis3d -> Float -> Vector3d -> Vector3d
 rotateAround (Types.Axis3d axis) angle =
     let
@@ -809,18 +502,7 @@ rotateAround (Types.Axis3d axis) angle =
             )
 
 
-{-| Mirror a vector across a plane.
-
-    vector =
-        Vector3d.fromComponents ( 1, 2, 3 )
-
-    Vector3d.mirrorAcross Plane3d.xy vector
-    --> Vector3d.fromComponents ( 1, 2, -3 )
-
-    Vector3d.mirrorAcross Plane3d.yz vector
-    --> Vector3d.fromComponents ( -1, 2, 3 )
-
--}
+{-| -}
 mirrorAcross : Plane3d -> Vector3d -> Vector3d
 mirrorAcross plane =
     let
@@ -857,57 +539,19 @@ mirrorAcross plane =
             )
 
 
-{-| Find the projection of a vector in a particular direction. Conceptually,
-this means splitting the original vector into a portion parallel to the given
-direction and a portion perpendicular to it, then returning the parallel
-portion.
-
-    vector =
-        Vector3d.fromComponents ( 1, 2, 3 )
-
-    Vector3d.projectionIn Direction3d.x vector
-    --> Vector3d.fromComponents ( 1, 0, 0 )
-
-    Vector3d.projectionIn Direction3d.z vector
-    --> Vector3d.fromComponents ( 0, 0, 3 )
-
--}
+{-| -}
 projectionIn : Direction3d -> Vector3d -> Vector3d
 projectionIn direction_ vector =
     direction_ |> withLength (vector |> componentIn direction_)
 
 
-{-| Project a vector [orthographically](https://en.wikipedia.org/wiki/Orthographic_projection)
-onto a plane. Conceptually, this means splitting the original vector into a
-portion parallel to the plane (perpendicular to the plane's normal direction)
-and a portion perpendicular to it (parallel to its normal direction), then
-returning the parallel (in-plane) portion.
-
-    vector =
-        Vector3d.fromComponents ( 2, 1, 3 )
-
-    Vector3d.projectOnto Plane3d.xy vector
-    --> Vector3d.fromComponents ( 2, 1, 0 )
-
-    Vector3d.projectOnto Plane3d.xz vector
-    --> Vector3d.fromComponents ( 2, 0, 3 )
-
--}
+{-| -}
 projectOnto : Plane3d -> Vector3d -> Vector3d
 projectOnto plane vector =
     difference vector (projectionIn (Plane3d.normalDirection plane) vector)
 
 
-{-| Take a vector defined in global coordinates, and return it expressed in
-local coordinates relative to a given reference frame.
-
-    vector =
-        Vector3d.fromComponents ( 2, 0, 3 )
-
-    Vector3d.relativeTo rotatedFrame vector
-    --> Vector3d.fromComponents ( 1.732, -1, 3 )
-
--}
+{-| -}
 relativeTo : Frame3d -> Vector3d -> Vector3d
 relativeTo frame vector =
     fromComponents
@@ -917,16 +561,7 @@ relativeTo frame vector =
         )
 
 
-{-| Take a vector defined in local coordinates relative to a given reference
-frame, and return that vector expressed in global coordinates.
-
-    vector =
-        Vector3d.fromComponents ( 2, 0, 3 )
-
-    Vector3d.placeIn rotatedFrame vector
-    --> Vector3d.fromComponents ( 1.732, 1, 3 )
-
--}
+{-| -}
 placeIn : Frame3d -> Vector3d -> Vector3d
 placeIn frame vector =
     let
@@ -949,24 +584,7 @@ placeIn frame vector =
         )
 
 
-{-| Project a vector into a given sketch plane. Conceptually, this finds the
-[orthographic projection](https://en.wikipedia.org/wiki/Orthographic_projection)
-of the vector onto the plane and then expresses the projected vector in 2D
-sketch coordinates.
-
-    vector =
-        Vector3d.fromComponents ( 2, 1, 3 )
-
-    Vector3d.projectInto SketchPlane3d.xy vector
-    --> Vector2d.fromComponents ( 2, 1 )
-
-    Vector3d.projectInto SketchPlane3d.yz vector
-    --> Vector2d.fromComponents ( 1, 3 )
-
-    Vector3d.projectInto SketchPlane3d.zx vector
-    --> Vector2d.fromComponents ( 3, 2 )
-
--}
+{-| -}
 projectInto : SketchPlane3d -> Vector3d -> Vector2d
 projectInto sketchPlane vector =
     Vector2d.fromComponents

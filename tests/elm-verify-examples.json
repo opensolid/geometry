@@ -1,6 +1,0 @@
-{
-  "root": "../src",
-  "tests": [
-  	"Sphere3d"
-  ]
-}

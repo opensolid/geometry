@@ -17,7 +17,7 @@ module Curve.ParameterValue
         , zero
         )
 
-{-| Curves in `elm-geometry` are [parameterized](https://en.wikipedia.org/wiki/Parametric_equation)
+{-| Curves in `opensolid/geometry` are [parameterized](https://en.wikipedia.org/wiki/Parametric_equation)
 by a value that ranges from 0 to 1. A value of 0 corresponds to the start point
 of the curve and a value of 1 corresponds to the end point. This module contains
 functionality for:

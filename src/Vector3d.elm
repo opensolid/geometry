@@ -58,10 +58,10 @@ vector-related functionality, such as
   - Converting vectors between different coordinate systems
 
 Note that unlike in many other geometry packages where vectors are used as a
-general-purpose data type, `elm-geometry` has separate data types for vectors,
-directions and points. In most code it is actually more common to use `Point3d`
-and `Direction3d` than `Vector3d`, and much code can avoid working directly with
-`Vector3d` values at all!
+general-purpose data type, `opensolid/geometry` has separate data types for
+vectors, directions and points. In most code it is actually more common to use
+`Point3d` and `Direction3d` than `Vector3d`, and much code can avoid working
+directly with `Vector3d` values at all!
 
 @docs Vector3d
 

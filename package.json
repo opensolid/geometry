@@ -1,0 +1,20 @@
+{
+  "name": "elm-geometry",
+  "dependencies": {
+    "elm-test": "^0.18.12"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "elm-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianmackenzie/elm-geometry.git"
+  },
+  "author": "Ian Mackenzie <ian.e.mackenzie@gmail.com>",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/ianmackenzie/elm-geometry/issues"
+  },
+  "homepage": "https://github.com/ianmackenzie/elm-geometry#readme"
+}

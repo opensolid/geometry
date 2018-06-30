@@ -1,4 +1,4 @@
-# opensolid/geometry [![Travis build Status](https://travis-ci.org/opensolid/geometry.svg?branch=master)](https://travis-ci.org/opensolid/geometry)
+# elm-geometry [![Build Status](https://travis-ci.org/ianmackenzie/elm-geometry.svg?branch=elm-0.18)](https://travis-ci.org/ianmackenzie/elm-geometry)
 
 _Note: Future versions of this package will be published as
 [`ianmackenzie/elm-geometry`](https://github.com/ianmackenzie/elm-geometry)._
@@ -42,7 +42,7 @@ A wide variety of data types are supported:
     ![Frame3d](https://opensolid.github.io/images/geometry/icons/frame3d.svg)
     ![SketchPlane3d](https://opensolid.github.io/images/geometry/icons/sketchPlane3d.svg)
 
-  - `BoundingBox2d`, `BoundingBox3d`, `Interval`
+  - `BoundingBox2d`, `BoundingBox3d`
 
     ![BoundingBox2d](https://opensolid.github.io/images/geometry/icons/boundingBox2d.svg)
     ![BoundingBox3d](https://opensolid.github.io/images/geometry/icons/boundingBox3d.svg)
@@ -89,28 +89,29 @@ Direction2d.fromAngle (degrees 30)
 
 Point3d.midpoint p1 p2
 
+Vector2d.withLength 3 Direction2d.y
+
 Triangle2d.fromVertices ( p1, p2, p3 )
 
 -- fit a plane through three points
-Plane3d.throughPoints ( p1, p2, p3 )
+Plane3d.throughPoints p1 p2 p3
 
-Axis3d.with
-    { originPoint = Point3d.origin
-    , direction = Direction3d.z
-    }
+Axis3d.through Point3d.origin Direction3d.z
 
-Arc2d.fromEndpoints
+Arc2d.from p1 p2 (degrees 90)
+
+QuadraticSpline3d.with
     { startPoint = p1
-    , endPoint = p2
-    , radius = 3
-    , sweptAngle = Arc2d.smallPositive
+    , controlPoint = p2
+    , endPoint = p3
     }
 
-QuadraticSpline3d.fromControlPoints ( p1, p2, p3 )
-
-CubicSpline2d.hermite
-    ( startPoint, startDerivative )
-    ( endPoint, endDerivative )
+CubicSpline2d.fromEndpoints
+    { startPoint = p1
+    , startDerivative = v1
+    , endPoint = p2
+    , endDerivative = v2
+    }
 ```
 
 ...point/vector arithmetic...
@@ -174,73 +175,61 @@ point3d =
     Point3d.on SketchPlane3d.yz point2d
 ```
 
-Support is also provided for encoding/decoding values to and from JSON.
-
 ## Installation
 
 Assuming you have [installed Elm](https://guide.elm-lang.org/install.html) and
 started a new project, use [elm-package](https://guide.elm-lang.org/install.html#elm-package)
-to install `opensolid/geometry`, either by running
+to install `elm-geometry`, either by running
 
 ```
-elm package install opensolid/geometry
+elm package install ianmackenzie/elm-geometry
 ```
 
 in a command prompt inside your project directory or by adding
 
 ```json
-"opensolid/geometry": "2.1.0 <= v < 3.0.0"
+"ianmackenzie/elm-geometry": "1.0.0 <= v < 2.0.0"
 ```
 
 to the `dependencies` field in your project's `elm-package.json`.
 
 ## Documentation
 
-[Full API documentation](http://package.elm-lang.org/packages/opensolid/geometry/2.1.0)
+[Full API documentation](http://package.elm-lang.org/packages/ianmackenzie/elm-geometry/1.0.0)
 is available for each module. Most modules are associated with a particular data
-type (for example, the [`Point3d`](http://package.elm-lang.org/packages/opensolid/geometry/2.1.0/OpenSolid-Point3d)
+type (for example, the [`Point3d`](http://package.elm-lang.org/packages/ianmackenzie/elm-geometry/1.0.0/Point3d)
 module contains functions for creating and manipulating `Point3d` values).
 
 ## Usage details
 
 Following the [Elm package design guidelines](http://package.elm-lang.org/help/design-guidelines#module-names-should-not-reappear-in-function-names),
-most OpenSolid modules are designed to be imported using `as` and then used as
-prefixes for the functions and values that they define. Types are designed to
-be imported unqualified using `exposing`:
+most `elm-geometry` modules are designed to be imported exposing only the
+corresponding types, and using the module name as a prefix for everything else:
 
 ```elm
-import OpenSolid.Point3d as Point3d exposing (Point3d)
-import OpenSolid.Axis3d as Axis3d exposing (Axis3d)
+import Point3d exposing (Point3d)
+import Axis3d exposing (Axis3d)
 
 rotatedPoint : Point3d
 rotatedPoint =
     Point3d.rotateAround Axis3d.x (degrees 30) originalPoint
 ```
 
-## Related projects
-
-  - [`opensolid/svg`](http://package.elm-lang.org/packages/opensolid/svg/latest)
-    lets you create and manipulate SVG drawings using the data types from this
-    package.
-  - [`opensolid/linear-algebra-interop`](http://package.elm-lang.org/packages/opensolid/linear-algebra-interop/latest)
-    provides interop support between this package and
-    [`elm-community/linear-algebra`](http://package.elm-lang.org/packages/elm-community/linear-algebra/latest).
-
 ## Questions? Comments?
 
-Please [open a new issue](https://github.com/opensolid/geometry/issues) if you
+Please [open a new issue](https://github.com/ianmackenzie/elm-geometry/issues) if you
 run into a bug, if any documentation is missing/incorrect/confusing, or if
 there's a new feature that you would find useful. For general questions about
-using OpenSolid, try:
+using `elm-geometry`, try:
 
-  - Sending me (@ianmackenzie) a message on the [Elm Slack](http://elmlang.herokuapp.com/) -
-    even if you don't have any particular questions right now, just come say
-    hello!
+  - Joining the **#geometry** channel on the [Elm Slack](http://elmlang.herokuapp.com/),
+    or sending me (**@ianmackenzie**) a message - even if you don't have any
+    particular questions right now, it would be great to know what you're hoping
+    to do with the package!
   - Posting to the [Elm Discourse](https://discourse.elm-lang.org/) forums
-  - Posting to the [r/elm](https://reddit.com/r/elm) subreddit
   - Or if you happen to be in the New York area, come on out to the
     [Elm NYC meetup](https://www.meetup.com/Elm-NYC/) =)
 
 You can also find me on Twitter ([@ianemackenzie](https://twitter.com/ianemackenzie)),
-where I occasionally post OpenSolid-related stuff like demos or new releases.
-Have fun, and don't be afraid to ask for help!
+where I occasionally post `elm-geometry`-related stuff like demos or new
+releases. Have fun, and don't be afraid to ask for help!

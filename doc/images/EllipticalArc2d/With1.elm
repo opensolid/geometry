@@ -1,12 +1,11 @@
 module EllipticalArc2d.With1 exposing (..)
 
+import BoundingBox2d exposing (BoundingBox2d)
+import Direction2d exposing (Direction2d)
+import EllipticalArc2d exposing (EllipticalArc2d)
 import FillsAndStrokes exposing (..)
 import Html exposing (Html)
-import OpenSolid.BoundingBox2d as BoundingBox2d exposing (BoundingBox2d)
-import OpenSolid.Direction2d as Direction2d exposing (Direction2d)
-import OpenSolid.EllipticalArc2d as EllipticalArc2d exposing (EllipticalArc2d)
-import OpenSolid.Point2d as Point2d exposing (Point2d)
-import OpenSolid.Svg as Svg
+import Point2d exposing (Point2d)
 import Svg exposing (Svg)
 
 

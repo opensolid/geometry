@@ -1,18 +1,17 @@
 module EllipticalArc2d.FromEndpoints exposing (..)
 
+import BoundingBox2d exposing (BoundingBox2d)
 import Char
+import Direction2d exposing (Direction2d)
+import EllipticalArc2d exposing (EllipticalArc2d)
 import Html exposing (Html)
-import OpenSolid.BoundingBox2d as BoundingBox2d exposing (BoundingBox2d)
-import OpenSolid.Direction2d as Direction2d exposing (Direction2d)
-import OpenSolid.EllipticalArc2d as EllipticalArc2d exposing (EllipticalArc2d)
-import OpenSolid.LineSegment2d as LineSegment2d exposing (LineSegment2d)
-import OpenSolid.Point2d as Point2d exposing (Point2d)
-import OpenSolid.Svg as Svg
-import OpenSolid.Svg.Interaction as Interaction
-import OpenSolid.Svg.Interaction.ScrollAmount as ScrollAmount exposing (ScrollAmount)
-import OpenSolid.Vector2d as Vector2d
+import LineSegment2d exposing (LineSegment2d)
+import Point2d exposing (Point2d)
 import Svg exposing (Svg)
 import Svg.Attributes
+import Svg.Interaction as Interaction
+import Svg.Interaction.ScrollAmount as ScrollAmount exposing (ScrollAmount)
+import Vector2d
 
 
 boundingBox : BoundingBox2d
@@ -327,17 +326,17 @@ sweptAngleString sweptAngle =
 view : Model -> Html Msg
 view model =
     let
-        endpointProperties =
+        properties =
             { startPoint = model.startPoint
             , endPoint = model.endPoint
-            , xDirection = model.xDirection
             , xRadius = model.xRadius
             , yRadius = model.yRadius
+            , xDirection = model.xDirection
             , sweptAngle = model.sweptAngle
             }
 
         computedArc =
-            EllipticalArc2d.fromEndpoints endpointProperties
+            EllipticalArc2d.fromEndpoints properties
 
         sweptAngleTypes =
             [ EllipticalArc2d.smallPositive
@@ -350,7 +349,7 @@ view model =
             sweptAngleTypes
                 |> List.map
                     (\sweptAngle ->
-                        { endpointProperties | sweptAngle = sweptAngle }
+                        { properties | sweptAngle = sweptAngle }
                     )
                 |> List.map EllipticalArc2d.fromEndpoints
                 |> List.map2 (,) sweptAngleTypes
@@ -379,21 +378,17 @@ view model =
                         xPoint =
                             centerPoint
                                 |> Point2d.translateBy
-                                    (Vector2d.with
-                                        { length = model.xRadius
-                                        , direction = model.xDirection
-                                        }
+                                    (Vector2d.withLength model.xRadius
+                                        model.xDirection
                                     )
 
                         yPoint =
                             centerPoint
                                 |> Point2d.translateBy
-                                    (Vector2d.with
-                                        { length = model.yRadius
-                                        , direction =
-                                            Direction2d.perpendicularTo
-                                                model.xDirection
-                                        }
+                                    (Vector2d.withLength model.yRadius
+                                        (Direction2d.perpendicularTo
+                                            model.xDirection
+                                        )
                                     )
 
                         xRadialLine =

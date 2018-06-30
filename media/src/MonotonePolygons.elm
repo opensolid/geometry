@@ -1,20 +1,19 @@
 module MonotonePolygones exposing (..)
 
 import Array.Hamt as Array
+import BoundingBox2d exposing (BoundingBox2d)
 import Html exposing (Html)
 import Html.Attributes
 import Html.Events
 import Kintail.InputWidget as InputWidget
-import OpenSolid.BoundingBox2d as BoundingBox2d exposing (BoundingBox2d)
-import OpenSolid.Point2d as Point2d exposing (Point2d)
-import OpenSolid.Polygon2d as Polygon2d exposing (Polygon2d)
-import OpenSolid.Polygon2d.Monotone as Monotone
-import OpenSolid.Svg as Svg
-import OpenSolid.Triangle2d as Triangle2d exposing (Triangle2d)
-import OpenSolid.Vector2d as Vector2d exposing (Vector2d)
+import Point2d exposing (Point2d)
+import Polygon2d exposing (Polygon2d)
+import Polygon2d.Monotone as Monotone
 import Random exposing (Generator)
 import Svg
 import Svg.Attributes
+import Triangle2d exposing (Triangle2d)
+import Vector2d exposing (Vector2d)
 
 
 type alias Model =
@@ -109,8 +108,10 @@ polygonGenerator =
                     |> Random.map List.unzip
                     |> Random.map
                         (\( innerLoop, outerLoop ) ->
-                            Polygon2d.withHoles outerLoop
-                                [ List.reverse innerLoop ]
+                            Polygon2d.with
+                                { outerLoop = outerLoop
+                                , innerLoops = [ List.reverse innerLoop ]
+                                }
                         )
             )
 

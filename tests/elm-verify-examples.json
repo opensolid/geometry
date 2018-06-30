@@ -1,6 +1,6 @@
 {
   "root": "../src",
   "tests": [
-  	"OpenSolid.Sphere3d"
+  	"Sphere3d"
   ]
 }

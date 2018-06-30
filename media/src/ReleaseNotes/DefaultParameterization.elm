@@ -1,28 +1,20 @@
 module ReleaseNotes.DefaultParameterization exposing (..)
 
+import CubicSpline2d
+import Drawing2d
+import Geometry.Parameter as Parameter
 import Html exposing (Html)
-import OpenSolid.CubicSpline2d as CubicSpline2d
-import OpenSolid.Svg as Svg
 import ReleaseNotes.Common exposing (..)
-import Svg
 
 
 main : Html Never
 main =
     let
-        parameterValues =
-            List.range 0 numSegments
-                |> List.map (\n -> toFloat n / toFloat numSegments)
-
         points =
-            parameterValues
-                |> List.map (CubicSpline2d.pointOn spline)
-
-        pointElements =
-            points |> List.map (Svg.point2d [ whiteFill, blackStroke ])
+            CubicSpline2d.pointsOn spline (Parameter.numSteps numSegments)
     in
-    Svg.render2d renderBounds <|
-        Svg.g []
-            [ Svg.cubicSpline2d [ blackStroke, noFill ] spline
-            , Svg.g [] pointElements
-            ]
+    Drawing2d.toHtml renderBounds
+        []
+        [ Drawing2d.cubicSpline spline
+        , Drawing2d.dots points
+        ]

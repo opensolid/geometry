@@ -2,12 +2,12 @@ module ArcLengthParameterization exposing (..)
 
 import Benchmark exposing (Benchmark)
 import Benchmark.Runner exposing (BenchmarkProgram)
-import OpenSolid.CubicSpline2d as CubicSpline2d exposing (CubicSpline2d)
-import OpenSolid.CubicSpline3d as CubicSpline3d exposing (CubicSpline3d)
-import OpenSolid.Point2d as Point2d exposing (Point2d)
-import OpenSolid.Point3d as Point3d exposing (Point3d)
-import OpenSolid.QuadraticSpline2d as QuadraticSpline2d exposing (QuadraticSpline2d)
-import OpenSolid.QuadraticSpline3d as QuadraticSpline3d exposing (QuadraticSpline3d)
+import CubicSpline2d exposing (CubicSpline2d)
+import CubicSpline3d exposing (CubicSpline3d)
+import Point2d exposing (Point2d)
+import Point3d exposing (Point3d)
+import QuadraticSpline2d exposing (QuadraticSpline2d)
+import QuadraticSpline3d exposing (QuadraticSpline3d)
 
 
 tolerance : Float

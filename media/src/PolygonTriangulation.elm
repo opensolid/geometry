@@ -1,19 +1,18 @@
 module PolygonTriangulation exposing (..)
 
+import BoundingBox2d exposing (BoundingBox2d)
+import Color
+import Drawing2d
+import Drawing2d.Attributes as Attributes
 import Html exposing (Html)
 import Html.Attributes
 import Html.Events
 import Kintail.InputWidget as InputWidget
-import OpenSolid.BoundingBox2d as BoundingBox2d exposing (BoundingBox2d)
-import OpenSolid.Mesh as Mesh
-import OpenSolid.Point2d as Point2d exposing (Point2d)
-import OpenSolid.Polygon2d as Polygon2d exposing (Polygon2d)
-import OpenSolid.Svg as Svg
-import OpenSolid.Triangle2d as Triangle2d exposing (Triangle2d)
-import OpenSolid.Vector2d as Vector2d exposing (Vector2d)
-import Random exposing (Generator)
-import Svg
-import Svg.Attributes
+import Polygon2d exposing (Polygon2d)
+import Polygon2d.Random as Random
+import Random.Pcg as Random exposing (Generator)
+import Triangle2d exposing (Triangle2d)
+import TriangularMesh
 
 
 type alias Model =
@@ -34,85 +33,13 @@ renderBounds =
         { minX = 0
         , maxX = 800
         , minY = 0
-        , maxY = 600
+        , maxY = 800
         }
-
-
-polygonGenerator : Generator Polygon2d
-polygonGenerator =
-    let
-        centerPoint =
-            BoundingBox2d.centroid renderBounds
-
-        ( width, height ) =
-            BoundingBox2d.dimensions renderBounds
-
-        minRadius =
-            10
-
-        maxRadius =
-            0.5 * min width height - 10
-
-        midRadius =
-            (minRadius + maxRadius) / 2
-
-        innerRadiusGenerator =
-            Random.float minRadius (midRadius - 5)
-
-        outerRadiusGenerator =
-            Random.float (midRadius + 5) maxRadius
-    in
-    Random.int 3 32
-        |> Random.andThen
-            (\numPoints ->
-                Random.list numPoints
-                    (Random.pair innerRadiusGenerator outerRadiusGenerator)
-                    |> Random.map
-                        (List.indexedMap
-                            (\index ( innerRadius, outerRadius ) ->
-                                let
-                                    angle =
-                                        turns 1
-                                            * toFloat index
-                                            / toFloat numPoints
-
-                                    innerRadialVector =
-                                        Vector2d.fromPolarComponents
-                                            ( innerRadius
-                                            , angle
-                                            )
-
-                                    outerRadialVector =
-                                        Vector2d.fromPolarComponents
-                                            ( outerRadius
-                                            , angle
-                                            )
-
-                                    innerPoint =
-                                        centerPoint
-                                            |> Point2d.translateBy
-                                                innerRadialVector
-
-                                    outerPoint =
-                                        centerPoint
-                                            |> Point2d.translateBy
-                                                outerRadialVector
-                                in
-                                ( innerPoint, outerPoint )
-                            )
-                        )
-                    |> Random.map List.unzip
-                    |> Random.map
-                        (\( innerLoop, outerLoop ) ->
-                            Polygon2d.withHoles outerLoop
-                                [ List.reverse innerLoop ]
-                        )
-            )
 
 
 generateNewPolygon : Cmd Msg
 generateNewPolygon =
-    Random.generate NewPolygon polygonGenerator
+    Random.generate NewPolygon (Random.polygon2d renderBounds)
 
 
 init : ( Model, Cmd Msg )
@@ -150,25 +77,26 @@ view model =
             Polygon2d.triangulate rotatedPolygon
 
         triangles =
-            Mesh.faces mesh |> List.map Triangle2d.fromVertices
+            TriangularMesh.faceVertices mesh
+                |> List.map Triangle2d.fromVertices
 
         drawTriangle =
-            Svg.triangle2d
-                [ Svg.Attributes.fill "rgba(127, 127, 127, 0.25)"
-                , Svg.Attributes.stroke "rgb(127, 127, 127)"
+            Drawing2d.triangleWith
+                [ Attributes.fillColor (Color.rgba 192 192 192 0.25)
+                , Attributes.strokeColor (Color.rgb 192 192 192)
                 ]
+
+        polygonElement =
+            Drawing2d.polygonWith
+                [ Attributes.noFill, Attributes.blackStroke ]
+                rotatedPolygon
     in
     Html.div []
         [ Html.div [ Html.Events.onClick Click ]
-            [ Svg.render2d renderBounds <|
-                Svg.g []
-                    [ Svg.g [] (List.map drawTriangle triangles)
-                    , Svg.polygon2d
-                        [ Svg.Attributes.fill "none"
-                        , Svg.Attributes.stroke "black"
-                        ]
-                        rotatedPolygon
-                    ]
+            [ Drawing2d.toHtml renderBounds [] <|
+                [ Drawing2d.group (List.map drawTriangle triangles)
+                , polygonElement
+                ]
             ]
         , InputWidget.slider
             [ Html.Attributes.style [ ( "width", toString width ++ "px" ) ] ]

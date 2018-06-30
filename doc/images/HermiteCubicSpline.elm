@@ -1,13 +1,12 @@
 module HermiteCubicSpline2d exposing (..)
 
+import BoundingBox2d exposing (BoundingBox2d)
+import CubicSpline2d exposing (CubicSpline2d)
 import FillsAndStrokes exposing (..)
 import Html exposing (Html)
-import OpenSolid.BoundingBox2d as BoundingBox2d exposing (BoundingBox2d)
-import OpenSolid.CubicSpline2d as CubicSpline2d exposing (CubicSpline2d)
-import OpenSolid.Point2d as Point2d exposing (Point2d)
-import OpenSolid.Svg as Svg
-import OpenSolid.Vector2d as Vector2d exposing (Vector2d)
+import Point2d exposing (Point2d)
 import Svg exposing (Svg)
+import Vector2d exposing (Vector2d)
 
 
 main : Html Never

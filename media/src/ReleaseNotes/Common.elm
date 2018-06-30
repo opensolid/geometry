@@ -1,10 +1,8 @@
 module ReleaseNotes.Common exposing (..)
 
-import OpenSolid.BoundingBox2d as BoundingBox2d exposing (BoundingBox2d)
-import OpenSolid.CubicSpline2d as CubicSpline2d exposing (CubicSpline2d)
-import OpenSolid.Point2d as Point2d exposing (Point2d)
-import Svg exposing (Attribute)
-import Svg.Attributes as Attributes
+import BoundingBox2d exposing (BoundingBox2d)
+import CubicSpline2d exposing (CubicSpline2d)
+import Point2d exposing (Point2d)
 
 
 spline : CubicSpline2d
@@ -30,18 +28,3 @@ renderBounds =
         , minY = 80
         , maxY = 220
         }
-
-
-whiteFill : Attribute msg
-whiteFill =
-    Attributes.fill "white"
-
-
-noFill : Attribute msg
-noFill =
-    Attributes.fill "none"
-
-
-blackStroke : Attribute msg
-blackStroke =
-    Attributes.stroke "black"

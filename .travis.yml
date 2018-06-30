@@ -3,6 +3,10 @@ sudo: false
 language: node_js
 node_js: node
 
+branches:
+  only:
+    - elm-0.18
+
 cache:
   directories:
     - elm-stuff/build-artifacts
@@ -35,7 +39,7 @@ install:
 
 script:
   # elm-test is called from elm-verify-examples automatically
-  # as some modifications to the generated tests are required 
+  # as some modifications to the generated tests are required
   # elm-verify-examples is instructed to use the wrapper 'elm-test-wrapper.sh' instead
   # which does those modifications and then calls elm-test
   - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 elm-verify-examples --elm-test=./elm-test-wrapper.sh

@@ -1,10 +1,9 @@
 This is a (likely incomplete) list of the people who have contributed to
-the opensolid/geometry package. If you submit a patch to this repository, please
+the elm-geometry package. If you submit a patch to this repository, please
 add your name to the end of this list!
 
 Ian Mackenzie <ian.e.mackenzie@gmail.com>
 Matthieu Pizenberg <matthieu.pizenberg@gmail.com> (intersections)
 Folkert de Vries <folkert@folkertdev.nl> (length parameterization)
-Dan Fishgold <d.fishgold@gmail.com> (interval sin/cos)
 Felix Scheinost <felix.scheinost@gmail.com> (Sphere3d)
 Jakub Hampl <honitom@seznam.cz> (convex hull)

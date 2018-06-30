@@ -1,20 +1,20 @@
 module ReleaseNotes.ArcLengthParameterization exposing (..)
 
+import CubicSpline2d
+import Drawing2d
+import Geometry.Accuracy as Accuracy
 import Html exposing (Html)
-import OpenSolid.CubicSpline2d as CubicSpline2d
-import OpenSolid.Svg as Svg
 import ReleaseNotes.Common exposing (..)
-import Svg
 
 
 main : Html Never
 main =
     let
-        parameterization =
-            CubicSpline2d.arcLengthParameterized 0.5 spline
+        parameterizedSpline =
+            CubicSpline2d.arcLengthParameterized (Accuracy.maxError 0.5) spline
 
         overallArcLength =
-            CubicSpline2d.arcLength parameterization
+            CubicSpline2d.arcLength parameterizedSpline
 
         arcLengths =
             List.range 0 numSegments
@@ -30,13 +30,10 @@ main =
 
         points =
             arcLengths
-                |> List.filterMap (CubicSpline2d.pointAlong parameterization)
-
-        pointElements =
-            points |> List.map (Svg.point2d [ whiteFill, blackStroke ])
+                |> List.filterMap (CubicSpline2d.pointAlong parameterizedSpline)
     in
-    Svg.render2d renderBounds <|
-        Svg.g []
-            [ Svg.cubicSpline2d [ blackStroke, noFill ] spline
-            , Svg.g [] pointElements
-            ]
+    Drawing2d.toHtml renderBounds
+        []
+        [ Drawing2d.cubicSpline spline
+        , Drawing2d.dots points
+        ]

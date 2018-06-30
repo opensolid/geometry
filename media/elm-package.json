@@ -7,9 +7,9 @@
         ".",
         "src",
         "../src",
-        "../../svg/src",
-        "../../../ianmackenzie/script-experiment/src",
-        "../../mesh/src"
+        "../../elm-geometry-svg/src",
+        "../../elm-2d-drawing/src",
+        "../../script-experiment/src"
     ],
     "exposed-modules": [],
     "dependencies": {
@@ -19,8 +19,14 @@
         "elm-lang/core": "5.1.1 <= v < 6.0.0",
         "elm-lang/html": "2.0.0 <= v < 3.0.0",
         "elm-lang/http": "1.0.0 <= v < 2.0.0",
+        "elm-lang/mouse": "1.0.1 <= v < 2.0.0",
         "elm-lang/svg": "2.0.0 <= v < 3.0.0",
-        "kintail/input-widget": "1.0.6 <= v < 2.0.0"
+        "elm-lang/virtual-dom": "2.0.4 <= v < 3.0.0",
+        "ianmackenzie/elm-float-extra": "1.0.0 <= v < 2.0.0",
+        "ianmackenzie/elm-interval": "1.0.0 <= v < 2.0.0",
+        "ianmackenzie/elm-triangular-mesh": "1.0.1 <= v < 2.0.0",
+        "kintail/input-widget": "1.0.6 <= v < 2.0.0",
+        "mgold/elm-random-pcg": "5.0.2 <= v < 6.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
 }

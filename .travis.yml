@@ -3,10 +3,6 @@ sudo: false
 language: node_js
 node_js: node
 
-branches:
-  only:
-    - elm-0.18
-
 cache:
   directories:
     - elm-stuff/build-artifacts

@@ -1,5 +1,5 @@
 {
-    "version": "3.0.0",
+    "version": "3.0.1",
     "summary": "2D/3D geometric data types and operations",
     "repository": "https://github.com/opensolid/geometry.git",
     "license": "MPL-2.0",
